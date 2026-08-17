@@ -1,0 +1,74 @@
+<svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gold-arrow-top" x1="280" y1="180" x2="410" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F9C623" />
+      <stop offset="60%" stop-color="#E5A712" />
+      <stop offset="100%" stop-color="#FBD54E" />
+    </linearGradient>
+
+    <linearGradient id="gold-arrow-bottom" x1="330" y1="130" x2="400" y2="190" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#D8990E" />
+      <stop offset="70%" stop-color="#B87A04" />
+      <stop offset="100%" stop-color="#9C6400" />
+    </linearGradient>
+
+    <linearGradient id="gold-arrow-shaft" x1="260" y1="210" x2="340" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F3B91D" />
+      <stop offset="100%" stop-color="#E2A20E" />
+    </linearGradient>
+
+    <linearGradient id="black-facet-main" x1="120" y1="140" x2="280" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#252528" />
+      <stop offset="40%" stop-color="#18181A" />
+      <stop offset="100%" stop-color="#0F0F10" />
+    </linearGradient>
+
+    <linearGradient id="black-facet-bevel" x1="140" y1="120" x2="240" y2="280" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#3C3C42" />
+      <stop offset="70%" stop-color="#222226" />
+      <stop offset="100%" stop-color="#141416" />
+    </linearGradient>
+
+    <linearGradient id="black-shadow-side" x1="230" y1="260" x2="320" y2="330" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0D0D0E" />
+      <stop offset="100%" stop-color="#050505" />
+    </linearGradient>
+
+    <linearGradient id="black-right-stem" x1="250" y1="160" x2="360" y2="310" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#2A2A2E" />
+      <stop offset="50%" stop-color="#1B1B1E" />
+      <stop offset="100%" stop-color="#0E0E10" />
+    </linearGradient>
+
+    <linearGradient id="black-right-shadow" x1="290" y1="270" x2="340" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#111113" />
+      <stop offset="100%" stop-color="#020202" />
+    </linearGradient>
+
+    <linearGradient id="gold-v-text" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFD038" />
+      <stop offset="50%" stop-color="#E5A712" />
+      <stop offset="100%" stop-color="#B87A04" />
+    </linearGradient>
+  </defs>
+
+  <!-- Left G 3D Facets -->
+  <path d="M152 308 L246 308 L240 274 L180 274 L142 240 L166 168 L286 126 L278 102 L150 144 L120 236 Z" fill="url(#black-shadow-side)" />
+  <path d="M166 142 L284 102 L294 134 L196 170 L156 244 L188 274 L244 274 L252 308 L152 308 L124 238 Z" fill="url(#black-facet-main)" />
+  <path d="M166 142 L284 102 L274 94 L152 134 L124 238 L138 238 Z" fill="url(#black-facet-bevel)" />
+  <path d="M196 170 L294 134 L280 178 L214 200 Z" fill="#1C1C1F" />
+  <path d="M196 170 L214 200 L156 244 Z" fill="#111113" />
+  <path d="M152 308 L252 308 L238 280 L174 280 L144 246 L124 238 Z" fill="#18181B" />
+
+  <!-- Right Stem 3D Facets -->
+  <path d="M260 270 L318 308 L286 308 L242 274 Z" fill="url(#black-right-shadow)" />
+  <path d="M256 166 L312 284 L318 308 L262 308 L218 248 L272 198 Z" fill="url(#black-right-stem)" />
+  <path d="M312 284 L360 170 L332 152 L284 226 L318 308 Z" fill="#0B0B0C" />
+
+  <!-- 3D Gold Arrow -->
+  <path d="M262 186 L332 134 L312 116 L248 168 Z" fill="url(#gold-arrow-shaft)" />
+  <path d="M398 84 L310 118 L348 148 Z" fill="url(#gold-arrow-top)" />
+  <path d="M398 84 L348 148 L374 186 Z" fill="url(#gold-arrow-bottom)" />
+  <path d="M398 84 L348 148" stroke="#FFE680" stroke-width="2.5" stroke-linecap="round" />
+  <path d="M310 118 L348 148 L330 162 Z" fill="#A06800" />
+</svg>
