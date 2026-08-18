@@ -65,7 +65,7 @@ export const Footer: React.FC = () => {
             </div>
             <div className="flex flex-wrap gap-2">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/govizen_official?igsh=eWg2bmY5cjFzcjQ0"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="GoVizen on Instagram"

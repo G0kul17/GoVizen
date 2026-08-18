@@ -247,7 +247,7 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
 
                 {/* Instagram */}
                 <a
-                  href="https://instagram.com"
+                  href="https://www.instagram.com/govizen_official?igsh=eWg2bmY5cjFzcjQ0"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 p-3.5 rounded-sm bg-[#0D0D0D] border border-[#1A1A1A] hover:border-[#C5A059]/40 transition-colors group"
@@ -260,7 +260,7 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
                       Instagram
                     </div>
                     <div className="text-[10px] text-[#555555] font-mono">
-                      @govizen.studio
+                      @govizen_official
                     </div>
                   </div>
                 </a>
