@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, Github, Instagram, Linkedin, Mail } from 'lucide-react';
+import { ArrowUp, Instagram, Linkedin, Mail } from 'lucide-react';
 import { GoVizenLogo } from './GoVizenLogo';
 
 export const Footer: React.FC = () => {
@@ -81,15 +81,6 @@ export const Footer: React.FC = () => {
                 className="p-2.5 rounded-sm bg-[#0D0D0D] border border-[#1A1A1A] text-[#888888] hover:text-white hover:border-[#C5A059]/40 transition-colors"
               >
                 <Linkedin className="w-4 h-4" />
-              </a>
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GoVizen on GitHub"
-                className="p-2.5 rounded-sm bg-[#0D0D0D] border border-[#1A1A1A] text-[#888888] hover:text-white hover:border-[#C5A059]/40 transition-colors"
-              >
-                <Github className="w-4 h-4" />
               </a>
               <a
                 href="mailto:govizenofficial@gmail.com"

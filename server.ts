@@ -7,9 +7,12 @@ interface ProjectInquiry {
   id: string;
   name: string;
   email: string;
+  businessType?: string;
+  serviceNeeded?: string;
+  projectStage?: string;
   company?: string;
-  projectType: string;
-  budget: string;
+  projectType?: string;
+  budget?: string;
   message: string;
   submittedAt: string;
 }
@@ -25,7 +28,7 @@ async function startServer() {
   // API Route: Submit new Project Request & Notify Founders
   app.post('/api/contact', async (req, res) => {
     try {
-      const { name, email, company, projectType, budget, message } = req.body;
+      const { name, email, businessType, serviceNeeded, projectStage, company, projectType, budget, message } = req.body;
 
       if (!name || !email || !message) {
         return res.status(400).json({
@@ -38,9 +41,11 @@ async function startServer() {
         id: `REQ-${Date.now().toString(36).toUpperCase()}`,
         name: String(name).trim(),
         email: String(email).trim(),
+        businessType: businessType ? String(businessType).trim() : undefined,
+        serviceNeeded: serviceNeeded ? String(serviceNeeded).trim() : (projectType ? String(projectType).trim() : 'Web Application'),
+        projectStage: projectStage ? String(projectStage).trim() : undefined,
         company: company ? String(company).trim() : undefined,
-        projectType: String(projectType || 'Web Application').trim(),
-        budget: String(budget || '5,000 – 10,000').trim(),
+        budget: budget ? String(budget).trim() : undefined,
         message: String(message).trim(),
         submittedAt: new Date().toISOString()
       };
@@ -92,19 +97,20 @@ async function startServer() {
                     <td style="padding: 6px 0; color: #888888;">Client Email:</td>
                     <td style="padding: 6px 0; color: #C5A059;"><a href="mailto:${inquiry.email}" style="color: #C5A059; text-decoration: none;">${inquiry.email}</a></td>
                   </tr>
-                  ${inquiry.company ? `
+                  ${inquiry.businessType ? `
                   <tr>
-                    <td style="padding: 6px 0; color: #888888;">Company / Brand:</td>
-                    <td style="padding: 6px 0; color: #FFFFFF;">${inquiry.company}</td>
+                    <td style="padding: 6px 0; color: #888888;">Business / Project Type:</td>
+                    <td style="padding: 6px 0; color: #FFFFFF;">${inquiry.businessType}</td>
                   </tr>` : ''}
                   <tr>
-                    <td style="padding: 6px 0; color: #888888;">Project Type:</td>
-                    <td style="padding: 6px 0; color: #FFFFFF; font-weight: 500;">${inquiry.projectType}</td>
+                    <td style="padding: 6px 0; color: #888888;">Service Needed:</td>
+                    <td style="padding: 6px 0; color: #FFFFFF; font-weight: 500;">${inquiry.serviceNeeded}</td>
                   </tr>
+                  ${inquiry.projectStage ? `
                   <tr>
-                    <td style="padding: 6px 0; color: #888888;">Budget Bracket:</td>
-                    <td style="padding: 6px 0; color: #C5A059; font-weight: 600;">${inquiry.budget}</td>
-                  </tr>
+                    <td style="padding: 6px 0; color: #888888;">Project Stage:</td>
+                    <td style="padding: 6px 0; color: #C5A059; font-weight: 600;">${inquiry.projectStage}</td>
+                  </tr>` : ''}
                 </table>
               </div>
 
@@ -118,7 +124,7 @@ ${inquiry.message}
               </div>
 
               <div style="text-align: center; padding-top: 16px; border-top: 1px solid #1F1F1F;">
-                <a href="mailto:${inquiry.email}?subject=Re:%20GoVizen%20Project%20Inquiry%20(${inquiry.id})&body=Hi%20${encodeURIComponent(inquiry.name)},%0A%0AThank%20you%20for%20reaching%20out%20to%20GoVizen.%20Vicky%20and%20I%20have%20reviewed%20your%20project%20details%20for%20${encodeURIComponent(inquiry.projectType)}..." 
+                <a href="mailto:${inquiry.email}?subject=Re:%20GoVizen%20Project%20Inquiry%20(${inquiry.id})&body=Hi%20${encodeURIComponent(inquiry.name)},%0A%0AThank%20you%20for%20reaching%20out%20to%20GoVizen.%20Vicky%20and%20I%20have%20reviewed%20your%20project%20details..." 
                    style="display: inline-block; padding: 10px 24px; background-color: #C5A059; color: #000000; font-size: 12px; font-weight: 700; text-decoration: none; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;">
                   Reply Directly to ${inquiry.name}
                 </a>
@@ -130,9 +136,9 @@ ${inquiry.message}
             from: `"GoVizen Studio" <${smtpUser}>`,
             to: founderEmail,
             replyTo: inquiry.email,
-            subject: `[New GoVizen Project Request] ${inquiry.name} - ${inquiry.projectType} (${inquiry.budget})`,
+            subject: `[New GoVizen Project Request] ${inquiry.name} - ${inquiry.serviceNeeded}`,
             html: mailHtml,
-            text: `New GoVizen Project Inquiry\n\nName: ${inquiry.name}\nEmail: ${inquiry.email}\nCompany: ${inquiry.company || 'N/A'}\nType: ${inquiry.projectType}\nBudget: ${inquiry.budget}\n\nMessage:\n${inquiry.message}`
+            text: `New GoVizen Project Inquiry\n\nName: ${inquiry.name}\nEmail: ${inquiry.email}\nBusiness Type: ${inquiry.businessType || 'N/A'}\nService Needed: ${inquiry.serviceNeeded}\nStage: ${inquiry.projectStage || 'N/A'}\n\nMessage:\n${inquiry.message}`
           });
 
           emailDispatched = true;

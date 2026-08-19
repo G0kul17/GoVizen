@@ -56,8 +56,9 @@ export interface ProcessStep {
 export interface ContactFormData {
   name: string;
   email: string;
-  company: string;
-  projectType: string;
-  budget: string;
+  company?: string;
+  businessType: string;
+  serviceNeeded: string;
+  projectStage: string;
   message: string;
 }

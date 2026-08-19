@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { ContactFormData } from '../types';
-import { Mail, MessageCircle, CheckCircle2, ArrowRight, Instagram, Linkedin, Send, ExternalLink, Copy, Check, X, Phone } from 'lucide-react';
+import { Mail, MessageCircle, CheckCircle2, ArrowRight, Instagram, Linkedin, Send, ExternalLink, Copy, Check, X, Phone, ChevronDown } from 'lucide-react';
 
 interface ContactProps {
-  initialScopeData?: { projectType: string; budget: string; message: string } | null;
+  initialScopeData?: { projectType?: string; budget?: string; message?: string; serviceNeeded?: string } | null;
 }
 
 export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
@@ -11,8 +11,9 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
     name: '',
     email: '',
     company: '',
-    projectType: initialScopeData?.projectType || 'Web Application',
-    budget: initialScopeData?.budget || '5,000 – 10,000',
+    businessType: 'My Business',
+    serviceNeeded: initialScopeData?.serviceNeeded || initialScopeData?.projectType || 'Web Application',
+    projectStage: '',
     message: initialScopeData?.message || '',
   });
 
@@ -49,34 +50,49 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
     if (initialScopeData) {
       setFormData(prev => ({
         ...prev,
-        projectType: initialScopeData.projectType,
-        budget: initialScopeData.budget,
+        serviceNeeded: initialScopeData.serviceNeeded || initialScopeData.projectType || prev.serviceNeeded,
         message: initialScopeData.message ? `${prev.message ? prev.message + '\n\n' : ''}${initialScopeData.message}` : prev.message
       }));
     }
   }, [initialScopeData]);
 
-  const projectTypes = [
-    'Web Application',
-    'AI Solution / LLM',
-    'Automation System',
-    'UI/UX Design',
-    'Custom Software',
-    'MVP / Startup Prototype'
+  const businessTypes = [
+    'Myself / Personal Brand',
+    'My Business',
+    'Startup / New Venture',
+    'School / College / Institution',
+    'Online Store',
+    'Client / Organization',
+    'Other'
   ];
 
-  const budgetRanges = [
-    '5,000 – 10,000',
-    '10,000 – 15,000',
-    '15,000+'
+  const servicesNeeded = [
+    'Business Website',
+    'Portfolio Website',
+    'E-commerce Website',
+    'Web Application',
+    'AI Solution / LLM',
+    'Automation',
+    'UI/UX Design',
+    'Custom Software',
+    'MVP / Prototype'
+  ];
+
+  const projectStages = [
+    'Just an Idea',
+    'Planning / Research',
+    'Have Designs',
+    'Have an Existing Website',
+    'Need a Redesign',
+    'Ready to Start Development'
   ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage('');
 
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
-      setErrorMessage('Please fill in your name, email, and a brief description of what you want to build.');
+    if (!formData.name.trim() || !formData.email.trim() || !formData.projectStage || !formData.message.trim()) {
+      setErrorMessage('Please fill in your name, email, project stage, and project details.');
       return;
     }
 
@@ -93,16 +109,17 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          _subject: `[GoVizen Project Order] ${formData.name} - ${formData.projectType} (${formData.budget})`,
+          _subject: `[GoVizen Project Order] ${formData.name} - ${formData.serviceNeeded} (${formData.businessType})`,
           _replyto: formData.email,
           _template: 'table',
           _captcha: 'false',
           'Client Name': formData.name,
           'Client Email': formData.email,
           'Company / Brand': formData.company || 'Not Specified',
-          'Project Type': formData.projectType,
-          'Expected Budget': formData.budget,
-          'Project Scope & Details': formData.message,
+          'Business / Project Type': formData.businessType,
+          'Service Needed': formData.serviceNeeded,
+          'Project Stage': formData.projectStage,
+          'Project Details & Objective': formData.message,
           'Order ID': newInquiryId,
           'Submitted At': new Date().toLocaleString()
         })
@@ -128,18 +145,19 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
     }
   };
 
-  const directMailtoUrl = `mailto:govizenofficial@gmail.com?subject=${encodeURIComponent(`[Project Request ${inquiryId || ''}] ${formData.name} - ${formData.projectType}`)}&body=${encodeURIComponent(
+  const directMailtoUrl = `mailto:govizenofficial@gmail.com?subject=${encodeURIComponent(`[Project Request ${inquiryId || ''}] ${formData.name} - ${formData.serviceNeeded}`)}&body=${encodeURIComponent(
     `Hello Vicky & Gokul,\n\nHere are my project details submitted through GoVizen:\n\n` +
     `• Name: ${formData.name}\n` +
     `• Email: ${formData.email}\n` +
-    `• Company: ${formData.company || 'N/A'}\n` +
-    `• Project Type: ${formData.projectType}\n` +
-    `• Budget: ${formData.budget}\n\n` +
-    `Project Scope & Details:\n${formData.message}\n\nBest regards,\n${formData.name}`
+    (formData.company ? `• Company: ${formData.company}\n` : '') +
+    `• Business / Project Type: ${formData.businessType}\n` +
+    `• Service Needed: ${formData.serviceNeeded}\n` +
+    `• Project Stage: ${formData.projectStage}\n\n` +
+    `Project Details & Objective:\n${formData.message}\n\nBest regards,\n${formData.name}`
   )}`;
 
   const handleCopySummary = () => {
-    const summaryText = `[GoVizen Project Inquiry ${inquiryId}]\nClient: ${formData.name} (${formData.email})\nCompany: ${formData.company || 'N/A'}\nType: ${formData.projectType}\nBudget: ${formData.budget}\n\nScope:\n${formData.message}`;
+    const summaryText = `[GoVizen Project Inquiry ${inquiryId}]\nClient: ${formData.name} (${formData.email})\nCompany: ${formData.company || 'N/A'}\nBusiness Type: ${formData.businessType}\nService Needed: ${formData.serviceNeeded}\nStage: ${formData.projectStage}\n\nDetails & Objective:\n${formData.message}`;
     navigator.clipboard.writeText(summaryText);
     setCopiedSummary(true);
     setTimeout(() => setCopiedSummary(false), 2000);
@@ -299,7 +317,7 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
                   <div className="text-left bg-[#0A0A0A] border border-[#1A1A1A] rounded-sm p-4 text-xs font-mono space-y-2.5 max-w-lg mx-auto">
                     <div className="text-[10px] uppercase tracking-wider text-[#666666] border-b border-[#161616] pb-1.5 flex justify-between items-center">
                       <span>Order Specification Sent</span>
-                      <span className="text-[#C5A059]">{formData.projectType}</span>
+                      <span className="text-[#C5A059]">{formData.serviceNeeded}</span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 text-[11px]">
@@ -318,13 +336,17 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
                         </div>
                       )}
                       <div>
-                        <span className="text-[#666666] block">Budget Bracket:</span>
-                        <span className="text-white">{formData.budget}</span>
+                        <span className="text-[#666666] block">Business Type:</span>
+                        <span className="text-white">{formData.businessType}</span>
+                      </div>
+                      <div>
+                        <span className="text-[#666666] block">Project Stage:</span>
+                        <span className="text-[#C5A059]">{formData.projectStage}</span>
                       </div>
                     </div>
 
                     <div className="pt-1 text-[11px]">
-                      <span className="text-[#666666] block">Project Objective:</span>
+                      <span className="text-[#666666] block">Project Details &amp; Objective:</span>
                       <p className="text-[#CCCCCC] text-xs font-sans mt-0.5 line-clamp-3 leading-relaxed">
                         {formData.message}
                       </p>
@@ -340,12 +362,13 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
                           name: '',
                           email: '',
                           company: '',
-                          projectType: 'Web Application',
-                          budget: '5,000 – 10,000',
+                          businessType: 'Small Business',
+                          serviceNeeded: 'Web Application',
+                          projectStage: '',
                           message: '',
                         });
                       }}
-                      className="px-5 py-2.5 rounded-sm text-[11px] font-mono uppercase tracking-wider text-black bg-[#C5A059] hover:bg-[#D4B26F] transition-colors font-semibold shadow-md"
+                      className="px-5 py-2.5 rounded-sm text-[11px] font-mono uppercase tracking-wider text-black bg-[#C5A059] hover:bg-[#D4B26F] transition-colors font-semibold shadow-md cursor-pointer"
                     >
                       Submit Another Project
                     </button>
@@ -362,11 +385,11 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   
-                  {/* Name & Email */}
+                  {/* 1. Name & 2. Email */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
                       <label htmlFor="contact-name" className="block text-[10px] font-mono uppercase tracking-wider text-[#888888] mb-2">
-                        Your Name <span className="text-[#C5A059]">*</span>
+                        1. Your Name <span className="text-[#C5A059]">*</span>
                       </label>
                       <input
                         id="contact-name"
@@ -381,7 +404,7 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
 
                     <div>
                       <label htmlFor="contact-email" className="block text-[10px] font-mono uppercase tracking-wider text-[#888888] mb-2">
-                        Email Address <span className="text-[#C5A059]">*</span>
+                        2. Email Address <span className="text-[#C5A059]">*</span>
                       </label>
                       <input
                         id="contact-email"
@@ -395,34 +418,37 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
                     </div>
                   </div>
 
-                  {/* Company/Business */}
+                  {/* 3. Company / Organization Name */}
                   <div>
                     <label htmlFor="contact-company" className="block text-[10px] font-mono uppercase tracking-wider text-[#888888] mb-2">
-                      Company / Organization <span className="text-[#444444]">(Optional)</span>
+                      3. Company / Organization <span className="text-[#555555]">(Optional)</span>
                     </label>
                     <input
                       id="contact-company"
                       type="text"
-                      value={formData.company}
+                      value={formData.company || ''}
                       onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                       placeholder="Acme Labs or Startup Name"
                       className="w-full px-4 py-3 rounded-sm bg-[#0A0A0A] border border-[#1A1A1A] text-white placeholder-[#444444] text-xs focus:outline-none focus:border-[#C5A059] focus:ring-1 focus:ring-[#C5A059] transition-colors"
                     />
                   </div>
 
-                  {/* What do you want to build? (Interactive category pills) */}
+                  {/* 4. Who is this project for? */}
                   <div>
-                    <label className="block text-[10px] font-mono uppercase tracking-wider text-[#888888] mb-2.5">
-                      What do you want to build?
+                    <label className="block text-[10px] font-mono uppercase tracking-wider text-[#888888] mb-1">
+                      4. Who is this project for? <span className="text-[#C5A059]">*</span>
                     </label>
+                    <p className="text-xs text-[#666666] font-light mb-2.5">
+                      Tell us who you're building this for.
+                    </p>
                     <div className="flex flex-wrap gap-2">
-                      {projectTypes.map((type) => (
+                      {businessTypes.map((type) => (
                         <button
                           key={type}
                           type="button"
-                          onClick={() => setFormData({ ...formData, projectType: type })}
-                          className={`px-3 py-1.5 rounded-sm text-xs font-mono transition-all ${
-                            formData.projectType === type
+                          onClick={() => setFormData({ ...formData, businessType: type })}
+                          className={`px-3 py-1.5 rounded-sm text-xs font-mono transition-all cursor-pointer ${
+                            formData.businessType === type
                               ? 'bg-white text-black font-semibold shadow-sm'
                               : 'bg-[#0A0A0A] text-[#888888] border border-[#1A1A1A] hover:border-[#333333]'
                           }`}
@@ -433,33 +459,56 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
                     </div>
                   </div>
 
-                  {/* Budget Range (Interactive pills) */}
+                  {/* 5. What do you need? */}
                   <div>
                     <label className="block text-[10px] font-mono uppercase tracking-wider text-[#888888] mb-2.5">
-                      Expected Budget Bracket
+                      5. What do you need?
                     </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      {budgetRanges.map((range) => (
+                    <div className="flex flex-wrap gap-2">
+                      {servicesNeeded.map((service) => (
                         <button
-                          key={range}
+                          key={service}
                           type="button"
-                          onClick={() => setFormData({ ...formData, budget: range })}
-                          className={`py-2 px-2 rounded-sm text-xs font-mono transition-all text-center ${
-                            formData.budget === range
-                              ? 'bg-[#161616] border border-[#C5A059] text-[#C5A059] font-medium'
-                              : 'bg-[#0A0A0A] border border-[#1A1A1A] text-[#666666] hover:text-[#AAAAAA]'
+                          onClick={() => setFormData({ ...formData, serviceNeeded: service })}
+                          className={`px-3 py-1.5 rounded-sm text-xs font-mono transition-all cursor-pointer ${
+                            formData.serviceNeeded === service
+                              ? 'bg-[#161616] border border-[#C5A059] text-[#C5A059] font-medium shadow-sm'
+                              : 'bg-[#0A0A0A] text-[#888888] border border-[#1A1A1A] hover:border-[#333333]'
                           }`}
                         >
-                          {range}
+                          {service}
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  {/* Message */}
+                  {/* 6. What stage is your project currently in? */}
+                  <div>
+                    <label className="block text-[10px] font-mono uppercase tracking-wider text-[#888888] mb-2.5">
+                      6. What stage is your project currently in? <span className="text-[#C5A059]">*</span>
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {projectStages.map((stage) => (
+                        <button
+                          key={stage}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, projectStage: stage })}
+                          className={`px-3 py-1.5 rounded-sm text-xs font-mono transition-all cursor-pointer ${
+                            formData.projectStage === stage
+                              ? 'bg-[#161616] border border-[#C5A059] text-[#C5A059] font-medium shadow-sm'
+                              : 'bg-[#0A0A0A] text-[#888888] border border-[#1A1A1A] hover:border-[#333333]'
+                          }`}
+                        >
+                          {stage}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 7. Project Details & Objective */}
                   <div>
                     <label htmlFor="contact-message" className="block text-[10px] font-mono uppercase tracking-wider text-[#888888] mb-2">
-                      Project Details &amp; Objective <span className="text-[#C5A059]">*</span>
+                      7. Project Details &amp; Objective <span className="text-[#C5A059]">*</span>
                     </label>
                     <textarea
                       id="contact-message"
@@ -467,8 +516,8 @@ export const Contact: React.FC<ContactProps> = ({ initialScopeData }) => {
                       required
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Briefly describe the product, problem to solve, or target launch deadline..."
-                      className="w-full px-4 py-3 rounded-sm bg-[#0A0A0A] border border-[#1A1A1A] text-white placeholder-[#444444] text-xs focus:outline-none focus:border-[#C5A059] focus:ring-1 focus:ring-[#C5A059] transition-colors resize-y"
+                      placeholder="Tell us about your business, what you're trying to build, key features you need, and the outcome you're looking for."
+                      className="w-full px-4 py-3 rounded-sm bg-[#0A0A0A] border border-[#1A1A1A] text-white placeholder-[#444444] text-xs focus:outline-none focus:border-[#C5A059] focus:ring-1 focus:ring-[#C5A059] transition-colors resize-y leading-relaxed"
                     />
                   </div>
 
